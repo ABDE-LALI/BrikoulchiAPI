@@ -18,14 +18,13 @@ class UserController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function createUser(Request $request)
-    {       
+    {
         try {
             $validateUser = Validator::make($request->all(), [
                 'firstName' => 'required|string|max:255',
                 'lastName' => 'required|string|max:255',
                 'username' => 'required|string|unique:users,username|max:255',
                 'email' => 'required|email|unique:users,email|max:255',
-                'phone' => 'required|string|max:20',
                 'password' => 'required|string|min:8'
             ]);
 
@@ -42,19 +41,18 @@ class UserController extends Controller
                 'lastName' => $request->lastName,
                 'username' => $request->username,
                 'email' => $request->email,
-                'phone' => $request->phone,
                 'password' => Hash::make($request->password),
                 'remember_token' => Str::random(10),
             ]);
+            $token = $user->createToken('auth_token')->plainTextToken;
 
             return response()->json([
                 'status' => true,
                 'message' => 'User created successfully',
                 'data' => [
                     'user' => $user->only(['id', 'firstName', 'lastName', 'email']),
-                    'token' => $user->createToken("API TOKEN")->plainTextToken
                 ]
-            ], 201); // 201 for resource creation
+            ], 201)->cookie('token', $token, 60 * 24 * 7, '/', null, true, true); // 201 for resource creation
 
         } catch (\Throwable $th) {
             return response()->json([
@@ -74,7 +72,7 @@ class UserController extends Controller
     {
         try {
             $validateUser = Validator::make($request->all(), [
-                'email' => 'required|email',
+                'username' => 'required',
                 'password' => 'required'
             ]);
 
@@ -86,24 +84,23 @@ class UserController extends Controller
                 ], 422);
             }
 
-            if (!Auth::attempt($request->only(['email', 'password']))) {
+            if (!Auth::attempt($request->only(['username', 'password']))) {
                 return response()->json([
                     'status' => false,
                     'message' => 'Invalid credentials',
                 ], 401);
             }
 
-            $user = User::where('email', $request->email)->first();
-
+            $user = User::where('username', $request->username)->first();
+            $token = $user->createToken('auth_token', ['*'])->plainTextToken;
             return response()->json([
                 'status' => true,
                 'message' => 'User logged in successfully',
+                'token' => $token,  
                 'data' => [
                     'user' => $user->only(['id', 'firstName', 'lastName', 'email']),
-                    'token' => $user->createToken("API TOKEN")->plainTextToken
                 ]
-            ], 200);
-
+            ], 200)->cookie('token', $token, 60 * 24 * 7, '/', null, true, true);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
@@ -120,20 +117,61 @@ class UserController extends Controller
      */
     public function logoutUser(Request $request)
     {
-        try {
-            $request->user()->currentAccessToken()->delete();
-
-            return response()->json([
-                'status' => true,
-                'message' => 'Successfully logged out'
-            ], 200);
-
-        } catch (\Throwable $th) {
+        // Check if user is authenticated via Sanctum
+        if (!auth()->guard('sanctum')->check()) {
             return response()->json([
                 'status' => false,
-                'message' => 'Logout failed',
-                'error' => $th->getMessage()
-            ], 500);
+                'message' => 'No authenticated user',
+            ], 401);
         }
+
+        // Revoke all tokens (or just current if you prefer)
+        $request->user()->tokens()->delete();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Logged out successfully',
+        ])->withoutCookie('token');
+    }
+    public function updateUser(Request $request)
+    {
+        $user = User::findOrFail($request->id);
+        return view('welcome');
+        // $validated = $request->validate([
+        //     'firstName' => 'required|string|max:255',
+        //     'lastName' => 'required|string|max:255',
+        //     'username' => 'required|string|max:255',
+        //     'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+        //     'phone1' => 'required|string|max:15',
+        //     'phone2' => 'nullable|string|max:15',
+        //     'address' => 'nullable|string|max:255',
+        // ]);
+        $validateUser = Validator::make($request->all(), [
+            'firstName' => 'required|string|max:255',
+            'lastName' => 'required|string|max:255',
+            'username' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,',
+            'phone1' => 'required|string|max:15',
+            'phone2' => 'nullable|string|max:15',
+            'address' => 'nullable|string|max:255',
+        ]);
+
+        $user->firstName = $validateUser['firstName'];
+        $user->lastName = $validateUser['lastName'];
+        $user->username = $validateUser['username'];
+        $user->email = $validateUser['email'];
+        $user->phone1 = $validateUser['phone1'];
+
+        if (isset($validateUser['phone2'])) {
+            $user->phone2 = $validateUser['phone2'];
+        }
+
+        if (isset($validateUser['address'])) {
+            $user->address = $validateUser['address'];
+        }
+
+        $user->save();
+
+        return response()->json(['message' => 'User updated successfully']);
     }
 }

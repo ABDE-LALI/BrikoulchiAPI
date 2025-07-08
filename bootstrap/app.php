@@ -12,16 +12,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        // Disable CSRF for API routes
-        $middleware->validateCsrfTokens(except: [
-            'api/*',
-            'auth/*',
-        ]);
-        
-        // Register your API middleware
-        $middleware->alias([
-            'api' => \App\Http\Middleware\ApiMiddleware::class,
-        ]);
+        $middleware->statefulApi();
+        $middleware->append(\Illuminate\Http\Middleware\HandleCors::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

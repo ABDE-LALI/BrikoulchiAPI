@@ -21,7 +21,8 @@ return new class extends Migration
             $table->string('image')->default('https://ui-avatars.com/api/?name=User&background=random');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->default(null);
-            $table->string('phone')->nullable();
+            $table->string('phone1')->nullable();
+            $table->string('phone2')->nullable();
             $table->string('phone_verified_at')->nullable();
             $table->string('address')->nullable();
             $table->string('password');
