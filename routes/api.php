@@ -11,7 +11,11 @@ Route::post('/auth/login', [UserController::class, 'loginUser']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/auth/logout', [UserController::class, 'logoutUser']);
     Route::put('/updateUserInfo', [UserController::class, 'updateUser']);
+    Route::get('/auth/isAuthenticated', function () {
+        return true;
+    });
 });
+
 // Route::put('/updateUserInfo', function () {
 //     return response()->json(['message' => 'Route is working']);
 // });
