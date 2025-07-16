@@ -20,7 +20,7 @@ return new class extends Migration
             $table->enum('status', ['busy', 'available'])->default('available');
             $table->enum('type', ['timecount', 'freelance']);
             $table->foreignId('category_id')->references('id')->on('categories')->onDelete('cascade');
-            $table->foreignId('provider_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('address');
             $table->float('lat')->nullable();
             $table->float('lng')->nullable();

@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('phone_verified_at')->nullable();
             $table->string('address')->nullable();
             $table->string('password');
+            $table->string('refresh_token')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
