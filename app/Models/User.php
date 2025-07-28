@@ -46,7 +46,12 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    public function services(){
+    public function services()
+    {
         return $this->hasMany(Service::class);
+    }
+    public function getImageUrlAttribute()
+    {
+        return $this->image ? asset('storage/' . $this->image) : null;
     }
 }
