@@ -10,9 +10,9 @@ use Illuminate\Support\Facades\Route;
 Route::post('/auth/register', [UserController::class, 'createUser']);
 Route::post('/auth/login', [UserController::class, 'loginUser']);
 Route::post('/auth/refresh', [UserController::class, 'refresh']);
+Route::post('/updateUserInfo', [UserController::class, 'updateUser']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/auth/logout', [UserController::class, 'logoutUser']);
-    Route::put('/updateUserInfo', [UserController::class, 'updateUser']);
     Route::get('/auth/profile', [UserController::class, 'index']);
     Route::get('/auth/isAuthenticated', function () {
         return true . 'hello';

@@ -30,7 +30,7 @@ class ServiceFactory extends Factory
             'lng' => $cordinates['longitude'],
             'rating' => fake()->randomFloat(2, 0, 5),
             'rating_count' => fake()->numberBetween(0, 100),
-            'provider_id' => fake()->numberBetween(1, 15),
+            'user_id' => fake()->numberBetween(1, 15),
             'category_id' => fake()->numberBetween(1, 15),
         ];
     }

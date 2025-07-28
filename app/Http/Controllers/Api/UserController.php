@@ -98,13 +98,21 @@ class UserController extends Controller
 
         return response()->json([
             'access_token' => $accessToken,
+            'user' => [
+                'id' => $user->id,
+                'username' => $user->username,
+                'email' => $user->email,
+                'firstName' => $user->firstName,
+                'lastName' => $user->lastName,
+                'image' => $user->image,
+            ],
         ])->cookie('refresh_token', $refreshToken, 60 * 24 * 7, '/', 'localhost', false, true, false, 'Strict');
     }
     public function refresh(Request $request)
     {
         $refreshToken = $request->cookie('refresh_token');
         if (!$refreshToken) {
-            return response()->json(['message' => 'Missing refresh token'], 401);
+            return response()->json(['message' => 'Credentials does not match'], 401);
         }
 
         $user = User::where('refresh_token', hash('sha256', $refreshToken))->first();
@@ -135,7 +143,7 @@ class UserController extends Controller
     public function updateUser(Request $request)
     {
         $user = User::findOrFail($request->id);
-        return view('welcome');
+        // return view('welcome');
         // $validated = $request->validate([
         //     'firstName' => 'required|string|max:255',
         //     'lastName' => 'required|string|max:255',
@@ -153,6 +161,7 @@ class UserController extends Controller
             'phone1' => 'required|string|max:15',
             'phone2' => 'nullable|string|max:15',
             'address' => 'nullable|string|max:255',
+            'image' => 'nullable|string'
         ]);
 
         $user->firstName = $validateUser['firstName'];
