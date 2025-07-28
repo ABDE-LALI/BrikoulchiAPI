@@ -144,17 +144,6 @@ class UserController extends Controller
     public function updateUser(Request $request)
     {
         $user = User::findOrFail($request->id);
-        // return response()->json(['message im inside update controller', $user]);
-        // return view('welcome');
-        // $validated = $request->validate([
-        //     'firstName' => 'required|string|max:255',
-        //     'lastName' => 'required|string|max:255',
-        //     'username' => 'required|string|max:255',
-        //     'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-        //     'phone1' => 'required|string|max:15',
-        //     'phone2' => 'nullable|string|max:15',
-        //     'address' => 'nullable|string|max:255',
-        // ]);
         $validateUser = Validator::make($request->all(), [
             'firstName' => 'required|string|max:255',
             'lastName' => 'required|string|max:255',
@@ -188,13 +177,14 @@ class UserController extends Controller
         if (isset($validated['address'])) {
             $user->address = $validated['address'];
         }
-        return response()->json($request->hasFile('image'));
-        if ($request->hasFile('image')) {
+        // return response()->json($request->filled('image') && Str::startsWith($request->image, 'data:image'));
+        if ($request->filled('image') && Str::startsWith($request->image, 'data:image')) {
             if ($user->image && Storage::disk('public')->exists($user->image)) {
                 Storage::disk('public')->delete($user->image);
             }
             // return response('testest');
-            $path = $request->file('image')->store('profile_images', 'public');
+            Storage::disk('public')->put('profile_images/' . $request->username . '.png', $request->image);
+            $path = $request->file('image');
             $user->image = $path;
         }
 
