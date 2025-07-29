@@ -105,7 +105,7 @@ class UserController extends Controller
                 'email' => $user->email,
                 'firstName' => $user->firstName,
                 'lastName' => $user->lastName,
-                'image' => $user->image,
+                'image' => $user->image ? asset('storage/' . $user->image) : null
             ],
         ])->cookie('refresh_token', $refreshToken, 60 * 24 * 7, '/', 'localhost', false, true, false, 'Strict');
     }
@@ -141,10 +141,10 @@ class UserController extends Controller
         return response()->json(['message' => 'Logged out'])->withoutCookie('refresh_token');
     }
 
-    public function updateUser(Request $request)
+    public function updateUser(Request $request, $id)
     {
-        $user = User::findOrFail($request->id);
-        $validateUser = Validator::make($request->all(), [
+        $user = User::findOrFail($id);
+        $validated = $request->validate([
             'firstName' => 'required|string|max:255',
             'lastName' => 'required|string|max:255',
             'username' => 'required|string|max:255',
@@ -152,43 +152,45 @@ class UserController extends Controller
             'phone1' => 'required|string|max:15',
             'phone2' => 'nullable|string|max:15',
             'address' => 'nullable|string|max:255',
-            'image' => 'nullable|string'
+            'image' => 'nullable|image|max:5120' // max 5MB
         ]);
-        if ($validateUser->fails()) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Validation error',
-                'errors' => $validateUser->errors()
-            ], 422);
-        }
+        // if ($validateUser->fails()) {
+        //     return response()->json([
+        //         'status' => false,
+        //         'message' => 'Validation error',
+        //         'errors' => $validateUser->errors()
+        //     ], 422);
+        // }
+        $user->fill($validated);
 
-        $validated = $validateUser->validated();
+        // $validated = $validateUser->validated();
 
-        $user->firstName = $validated['firstName'];
-        $user->lastName = $validated['lastName'];
-        $user->username = $validated['username'];
-        $user->email = $validated['email'];
-        $user->phone1 = $validated['phone1'];
+        // $user->firstName = $validated['firstName'];
+        // $user->lastName = $validated['lastName'];
+        // $user->username = $validated['username'];
+        // $user->email = $validated['email'];
+        // $user->phone1 = $validated['phone1'];
 
-        if (isset($validated['phone2'])) {
-            $user->phone2 = $validated['phone2'];
-        }
+        // if (isset($validated['phone2'])) {
+        //     $user->phone2 = $validated['phone2'];
+        // }
 
-        if (isset($validated['address'])) {
-            $user->address = $validated['address'];
-        }
+        // if (isset($validated['address'])) {
+        //     $user->address = $validated['address'];
+        // }
         // return response()->json($request->filled('image') && Str::startsWith($request->image, 'data:image'));
-        if ($request->filled('image') && Str::startsWith($request->image, 'data:image')) {
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
             if ($user->image && Storage::disk('public')->exists($user->image)) {
                 Storage::disk('public')->delete($user->image);
             }
-            // return response('testest');
-            Storage::disk('public')->put('profile_images/' . $request->username . '.png', $request->image);
-            $path = $request->file('image');
-            $user->image = $path;
-        }
 
-        $user->save();
+            // Store new image
+            $path = $request->file('image')->store('profile_images', 'public');
+
+            $user->image = $path;
+            $user->save();
+        }
 
         return response()->json(['message' => 'User updated successfully']);
     }

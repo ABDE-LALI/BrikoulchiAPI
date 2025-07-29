@@ -13,7 +13,7 @@ Route::post('/auth/refresh', [UserController::class, 'refresh']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/auth/logout', [UserController::class, 'logoutUser']);
     Route::get('/auth/profile', [UserController::class, 'index']);
-    Route::put('/updateUserInfo', [UserController::class, 'updateUser']);
+    Route::post('/updateUserInfo/{id}', [UserController::class, 'updateUser']);
     Route::get('/auth/isAuthenticated', function () {
         return true . 'hello';
     });
