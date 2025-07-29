@@ -105,7 +105,10 @@ class UserController extends Controller
                 'email' => $user->email,
                 'firstName' => $user->firstName,
                 'lastName' => $user->lastName,
-                'image' => $user->image ? asset('storage/' . $user->image) : null
+                'image' => $user->image ? asset('storage/' . $user->image) : null,
+                'phone1' => $user->phone1,
+                'phone2' => $user->phone2,
+                'address' => $user->address
             ],
         ])->cookie('refresh_token', $refreshToken, 60 * 24 * 7, '/', 'localhost', false, true, false, 'Strict');
     }
@@ -127,6 +130,17 @@ class UserController extends Controller
 
         return response()->json([
             'access_token' => $accessToken,
+            'user' => [
+                'id' => $user->id,
+                'username' => $user->username,
+                'email' => $user->email,
+                'firstName' => $user->firstName,
+                'lastName' => $user->lastName,
+                'image' => $user->image ? asset('storage/' . $user->image) : null,
+                'phone1' => $user->phone1,
+                'phone2' => $user->phone2,
+                'address' => $user->address
+            ]
         ]);
     }
 
@@ -190,6 +204,7 @@ class UserController extends Controller
 
             $user->image = $path;
             $user->save();
+            return response()->json(['message' => 'has image']);
         }
 
         return response()->json(['message' => 'User updated successfully']);
