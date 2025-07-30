@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
+use function PHPUnit\Framework\isNull;
 
 class UserController extends Controller
 {
@@ -158,41 +159,32 @@ class UserController extends Controller
     public function updateUser(Request $request, $id)
     {
         $user = User::findOrFail($id);
-        $validated = $request->validate([
+
+        $validateUser = Validator::make($request->all(), [
             'firstName' => 'required|string|max:255',
             'lastName' => 'required|string|max:255',
-            'username' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users,username,' . $user->id,
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'phone1' => 'required|string|max:15',
             'phone2' => 'nullable|string|max:15',
             'address' => 'nullable|string|max:255',
-            'image' => 'nullable|image|max:5120' // max 5MB
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120'
         ]);
-        // if ($validateUser->fails()) {
-        //     return response()->json([
-        //         'status' => false,
-        //         'message' => 'Validation error',
-        //         'errors' => $validateUser->errors()
-        //     ], 422);
-        // }
+
+        if ($validateUser->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validation error',
+                'errors' => $validateUser->errors()
+            ], 422);
+        }
+
+        $validated = $validateUser->validated();
+
+        // Update fields
         $user->fill($validated);
 
-        // $validated = $validateUser->validated();
-
-        // $user->firstName = $validated['firstName'];
-        // $user->lastName = $validated['lastName'];
-        // $user->username = $validated['username'];
-        // $user->email = $validated['email'];
-        // $user->phone1 = $validated['phone1'];
-
-        // if (isset($validated['phone2'])) {
-        //     $user->phone2 = $validated['phone2'];
-        // }
-
-        // if (isset($validated['address'])) {
-        //     $user->address = $validated['address'];
-        // }
-        // return response()->json($request->filled('image') && Str::startsWith($request->image, 'data:image'));
+        // Handle image upload
         if ($request->hasFile('image')) {
             // Delete old image if exists
             if ($user->image && Storage::disk('public')->exists($user->image)) {
@@ -201,13 +193,26 @@ class UserController extends Controller
 
             // Store new image
             $path = $request->file('image')->store('profile_images', 'public');
-
             $user->image = $path;
-            $user->save();
-            return response()->json(['message' => 'has image']);
+        }
+        // Handle profile image removal
+        elseif ($request->has('rmprofileimage') && $request->rmprofileimage) {
+            // Delete old image if exists
+            if ($user->image && Storage::disk('public')->exists($user->image)) {
+                Storage::disk('public')->delete($user->image);
+            }
+            // Set default image path
+            $user->image = '';
         }
 
-        return response()->json(['message' => 'User updated successfully']);
+        $user->save();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'User updated successfully',
+            'user' => $user,
+            // 'image_url' => $user->image ? asset('storage/' . $user->image) : null
+        ]);
     }
 }
 

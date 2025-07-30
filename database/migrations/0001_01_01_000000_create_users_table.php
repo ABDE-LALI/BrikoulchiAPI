@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('username');
             $table->boolean(('is_admin'))->default(false);
             $table->boolean('is_provider')->default(false);
-            $table->string('image')->default('https://ui-avatars.com/api/?name=User&background=random');
+            $table->string('image')->nullable()->default(null);
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->default(null);
             $table->string('phone1')->nullable();
