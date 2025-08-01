@@ -15,11 +15,11 @@ use function PHPUnit\Framework\isNull;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index($id)
     {
 
-        $user = User::with('services')->findOrFail(Auth::id());
-        return $user;
+        $user = User::with('services')->findOrFail($id);
+        return response()->json($user);
     }
     /**
      * Create User

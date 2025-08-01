@@ -24,6 +24,7 @@ Route::middleware('auth:sanctum')->group(function () {
 // routes/api.php
 Route::get('/Categories', [categoriesController::class, 'index']);
 Route::get('/Services', [servicesController::class, 'index']);
+Route::get('/user/index/', [UserController::class, 'index']);
 Route::get('/ip-info', function () {
     $response = Http::get('https://ipapi.co/json/');
     return $response->json();
