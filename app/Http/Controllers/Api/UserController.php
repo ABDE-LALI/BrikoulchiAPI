@@ -210,7 +210,17 @@ class UserController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'User updated successfully',
-            'user' => $user,
+            'user' => [
+                'id' => $user->id,
+                'username' => $user->username,
+                'email' => $user->email,
+                'firstName' => $user->firstName,
+                'lastName' => $user->lastName,
+                'image' => $user->image ? asset('storage/' . $user->image) : null,
+                'phone1' => $user->phone1,
+                'phone2' => $user->phone2,
+                'address' => $user->address
+            ]
             // 'image_url' => $user->image ? asset('storage/' . $user->image) : null
         ]);
     }
