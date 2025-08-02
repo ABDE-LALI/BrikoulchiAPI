@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('address');
             $table->float('lat')->nullable();
             $table->float('lng')->nullable();
+            $table->float('rating')->default(0);
             $table->timestamps();
         });
     }
