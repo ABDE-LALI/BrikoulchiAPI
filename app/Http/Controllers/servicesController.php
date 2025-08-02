@@ -9,7 +9,7 @@ class servicesController extends Controller
 {
     public function index()
     {
-        $services = Service::with('category')->get();
+        $services = Service::with(['category:id, name', 'reviews'])->get();
         return response()->json($services);
     }
 }

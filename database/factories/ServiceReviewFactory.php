@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ServicesReviews>
  */
-class ServicesReviewsFactory extends Factory
+class ServiceReviewFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,9 +17,12 @@ class ServicesReviewsFactory extends Factory
     public function definition(): array
     {
         return [
-            'text'=>fake()->text(),
-            'raiting' =>fake()->randomFloat(2, 0, 5),
-            'user_id' =>fake()->numberBetween(1, 15)
+            'text' => fake()->text(),
+            'service_id' => fake()->numberBetween(1, 15),
+            'user_id' => fake()->numberBetween(1, 15),
+            'likes' => fake()->numberBetween(10, 60),
+            'rating' => fake()->randomFloat(2, 0, 5),
+            'rating_count' => fake()->numberBetween(0, 100),
         ];
     }
 }

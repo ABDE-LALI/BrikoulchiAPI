@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Category;
 use App\Models\Service;
-use App\Models\ServicesReviews;
+use App\Models\ServiceReview;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -19,6 +19,6 @@ class DatabaseSeeder extends Seeder
         Category::factory()->count(15)->create();
         User::factory()->count(15)->create();
         Service::factory()->count(15)->create();
-        ServicesReviews::factory()->count(15)->create();
+        ServiceReview::factory()->count(15)->create();
     }
 }

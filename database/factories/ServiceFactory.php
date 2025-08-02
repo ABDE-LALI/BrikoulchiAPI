@@ -28,8 +28,6 @@ class ServiceFactory extends Factory
             'address' => fake()->city(),
             'lat' => $cordinates['latitude'],
             'lng' => $cordinates['longitude'],
-            'rating' => fake()->randomFloat(2, 0, 5),
-            'rating_count' => fake()->numberBetween(0, 100),
             'user_id' => fake()->numberBetween(1, 15),
             'category_id' => fake()->numberBetween(1, 15),
         ];
