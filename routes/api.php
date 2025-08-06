@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\categoriesController;
 use App\Http\Controllers\servicesController;
+use App\Models\ServiceReview;
 use Illuminate\Http\Request; // Fixed: Correct Request class
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
@@ -14,6 +15,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/auth/logout', [UserController::class, 'logoutUser']);
     Route::get('/auth/profile', [UserController::class, 'index']);
     Route::post('/updateUserInfo/{id}', [UserController::class, 'updateUser']);
+    Route::post('/auth/createReview', [servicesController::class, 'createReview']);
     Route::get('/auth/isAuthenticated', function () {
         return true . 'hello';
     });

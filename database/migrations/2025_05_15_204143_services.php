@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('description')->unique();
             $table->string('image')->nullable();
             $table->integer('listings');
+            $table->enum('workDays', ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'])->default('Monday   ');
+            $table->integer('workHours')->default(8);
             $table->enum('status', ['busy', 'available'])->default('available');
             $table->enum('type', ['timecount', 'freelance']);
             $table->foreignId('category_id')->references('id')->on('categories')->onDelete('cascade');
