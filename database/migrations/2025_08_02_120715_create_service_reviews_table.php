@@ -11,7 +11,7 @@ return new class extends Migration {
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->text('text')->nullable();
             $table->integer('likes')->default(0);
-            $table->float('rating', 3, 2)->nullable(); 
+            $table->float('rating', 3, 2)->default(0); 
             $table->integer('rating_count')->default(0);
             $table->timestamps();
         });

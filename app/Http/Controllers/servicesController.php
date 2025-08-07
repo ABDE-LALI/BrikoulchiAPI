@@ -21,29 +21,34 @@ class servicesController extends Controller
     public function createReview(Request $request)
     {
         try {
-            $validate = $request->validate([
-                'service_id' => 'required|integer',
-                'user_id' => 'required|integer',
-                'rating' => 'required|integer',
-                'text' => 'required|string',
-                'like' => 'required|boolean'
+            // Validate request
+            $validated = $request->validate([
+                'service_id' => 'required|integer|exists:services,id',
+                'user_id'    => 'required|integer|exists:users,id',
+                'rating'     => 'required|numeric|min:1|max:5',
+                'text'       => 'required|string|max:1000',
             ]);
 
-            $review = ServiceReview::create(
-                [
-                    'service_id' => $request->service_id,
-                    'user_id' => $request->user_id,
-                    'rating' => $request->rating,
-                    'text' => $request->text,
-                    'like' => $request->like
-                ]
-            );
-            return response()->json(['message'=>'your review is submitted succesfully', $review]);
-        } catch (\Throwable $th) {
+            // Create review
+            $review = ServiceReview::create($validated);
+
             return response()->json([
-                'status' => false,
-                'message' => 'Server haha',
-                'error' => '$th->getMessage()'
+                'message' => 'Your review has been submitted successfully.',
+                'review'  => $review
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Validation error
+            return response()->json([
+                'status'  => false,
+                'message' => 'Validation failed',
+                'errors'  => $e->errors()
+            ], 422);
+        } catch (\Throwable $th) {
+            // General server error
+            return response()->json([
+                'status'  => false,
+                'message' => 'Server error',
+                'error'   => $th->getMessage()
             ], 500);
         }
     }

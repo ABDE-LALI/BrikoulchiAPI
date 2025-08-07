@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class ServiceReview extends Model
 {
     use HasFactory;
+    protected $fillable = ['service_id', 'user_id', 'rating', 'text'];
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
