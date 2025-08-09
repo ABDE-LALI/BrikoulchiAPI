@@ -53,6 +53,14 @@ class servicesController extends Controller
             ], 500);
         }
     }
+    public function RemouveReview($reviewId){
+        $review = ServiceReview::findOrFail($reviewId);
+        $review->delete();
+        return response()->json([
+                'message' => 'Your review has been remouved successfully.',
+                'review'  => $review
+            ]);
+    }
     public function ReactWithLike(Request $request, $reviewId)
     {
         // Validate the request

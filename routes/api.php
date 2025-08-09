@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\categoriesController;
 use App\Http\Controllers\servicesController;
+use App\Http\Middleware\RemouveReview;
 use App\Models\ServiceReview;
 use Illuminate\Http\Request; // Fixed: Correct Request class
 use Illuminate\Support\Facades\Http;
@@ -17,6 +18,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/updateUserInfo/{id}', [UserController::class, 'updateUser']);
     Route::post('/auth/createReview', [servicesController::class, 'createReview']);
     Route::post('/auth/ReactWithLike/{reviewId}', [servicesController::class, 'ReactWithLike']);
+    Route::post('/auth/RemouveReview/{reviewId}', [servicesController::class, 'RemouveReview'])->middleware(RemouveReview::class);
     Route::get('/auth/isAuthenticated', function () {
         return true . 'hello';
     });
