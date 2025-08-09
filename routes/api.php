@@ -16,9 +16,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/auth/profile', [UserController::class, 'index']);
     Route::post('/updateUserInfo/{id}', [UserController::class, 'updateUser']);
     Route::post('/auth/createReview', [servicesController::class, 'createReview']);
+    Route::post('/auth/ReactWithLike/{reviewId}', [servicesController::class, 'ReactWithLike']);
     Route::get('/auth/isAuthenticated', function () {
         return true . 'hello';
     });
+
 });
 // Route::put('/updateUserInfo', function () {
 //     return response()->json(['message' => 'Route is working']);

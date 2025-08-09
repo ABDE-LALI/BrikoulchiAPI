@@ -10,9 +10,9 @@ return new class extends Migration {
             $table->foreignId('service_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->text('text')->nullable();
-            $table->integer('likes')->default(0);
             $table->float('rating', 3, 2)->default(0); 
             $table->integer('rating_count')->default(0);
+            $table->integer('like_count')->default(0);
             $table->timestamps();
         });
     }

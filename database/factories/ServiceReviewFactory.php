@@ -20,9 +20,9 @@ class ServiceReviewFactory extends Factory
             'text' => fake()->text(),
             'service_id' => fake()->numberBetween(1, 15),
             'user_id' => fake()->numberBetween(1, 15),
-            'likes' => fake()->numberBetween(10, 60),
             'rating' => fake()->randomFloat(2, 0, 5),
             'rating_count' => fake()->numberBetween(0, 100),
+            'like_count' => fake()->numberBetween(0, 100)
         ];
     }
 }

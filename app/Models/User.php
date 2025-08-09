@@ -51,6 +51,15 @@ class User extends Authenticatable
     {
         return $this->hasMany(Service::class);
     }
+    public function servicereviews()
+    {
+        return $this->hasMany(ServiceReview::class);
+    }
+    public function likedReviews()
+    {
+        return $this->belongsToMany(ServiceReview::class, 'review_likes', 'user_id', 'review_id')
+            ->withTimestamps();
+    }
     public function getImageUrlAttribute()
     {
         return $this->image ? asset('storage/' . $this->image) : null;

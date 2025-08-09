@@ -18,4 +18,12 @@ class ServiceReview extends Model
     {
         return $this->belongsTo(Service::class, 'service_id');
     }
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
+    }
+    public function likedByUsers()
+    {
+        return $this->belongsToMany(User::class, 'review_likes', 'review_id', 'user_id')->withTimestamps();
+    }
 }
