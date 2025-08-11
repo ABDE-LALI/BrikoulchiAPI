@@ -31,6 +31,7 @@ class ServiceFactory extends Factory
             'rating' => fake()->randomFloat(2, 0, 5),
             'user_id' => fake()->numberBetween(1, 15),
             'category_id' => fake()->numberBetween(1, 15),
+            'global_service_id' =>fake()->numberBetween(1, 15)
         ];
     }
 }

@@ -22,14 +22,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/auth/isAuthenticated', function () {
         return true . 'hello';
     });
-
 });
 // Route::put('/updateUserInfo', function () {
 //     return response()->json(['message' => 'Route is working']);
 // });
 // routes/api.php
-Route::get('/Categories', [categoriesController::class, 'index']);
-Route::get('/Services', [servicesController::class, 'index']);
+Route::get('/Categories/{withServices?}', [categoriesController::class, 'index']);
+Route::get('/Services/{userId?}', [servicesController::class, 'index']);
 Route::get('/user/index/', [UserController::class, 'index']);
 Route::get('/Service/reviews/{id}', [servicesController::class, 'getReviews']);
 Route::get('/ip-info', function () {

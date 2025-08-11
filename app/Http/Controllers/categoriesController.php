@@ -7,8 +7,16 @@ use Illuminate\Http\Request;
 
 class categoriesController extends Controller
 {
-    function index(){
-        $categories = Category::all();
-        return $categories;
+    public function index(bool $withServices = false)
+    {
+        try {
+            $categories = Category::when($withServices, function ($query) {
+                $query->with('services'); // Optional: Add nested relations here
+            })->get();
+
+            return response()->json($categories);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Database error while fatching the categories'], 500);
+        }
     }
 }

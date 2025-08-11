@@ -33,4 +33,8 @@ class Service extends Model
     {
         return $this->hasMany(ServiceReview::class);
     }
+    public function globalservice()
+    {
+        return $this->belongsTo(GlobalService::class, 'globla_service_id');
+    }
 }

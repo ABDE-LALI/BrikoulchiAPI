@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Category;
+use App\Models\GlobalService;
 use App\Models\Service;
 use App\Models\ServiceReview;
 use App\Models\User;
@@ -18,6 +19,7 @@ class DatabaseSeeder extends Seeder
     {
         Category::factory()->count(15)->create();
         User::factory()->count(15)->create();
+        GlobalService::factory()->count(15)->create();
         Service::factory()->count(15)->create();
         ServiceReview::factory()->count(15)->create();
     }

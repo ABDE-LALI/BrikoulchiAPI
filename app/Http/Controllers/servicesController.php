@@ -9,9 +9,14 @@ use Illuminate\Http\Request;
 
 class servicesController extends Controller
 {
-    public function index()
+    public function index($userId = null)
     {
-        $services = Service::with('category')->with('user')->with('reviews')->get();
+        $services = Service::with(['category', 'user', 'reviews'])
+            ->when($userId, function ($query, $userId) {
+                return $query->where('user_id', (int) $userId);
+            })
+            ->get();
+
         return response()->json($services);
     }
     public function getReviews($id)
@@ -53,13 +58,14 @@ class servicesController extends Controller
             ], 500);
         }
     }
-    public function RemouveReview($reviewId){
+    public function RemouveReview($reviewId)
+    {
         $review = ServiceReview::findOrFail($reviewId);
         $review->delete();
         return response()->json([
-                'message' => 'Your review has been remouved successfully.',
-                'review'  => $review
-            ]);
+            'message' => 'Your review has been remouved successfully.',
+            'review'  => $review
+        ]);
     }
     public function ReactWithLike(Request $request, $reviewId)
     {
@@ -70,10 +76,10 @@ class servicesController extends Controller
         ]);
         // Get authenticated user (more secure than getting user from request)
         $user = User::findOrFail($request->userId);
-        
+
         // Find the review or fail
         $review = ServiceReview::findOrFail($reviewId);
-        
+
         try {
             if ($request->like) {
                 // Check if already liked to prevent duplicates
