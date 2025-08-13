@@ -7,11 +7,11 @@ use Illuminate\Http\Request;
 
 class categoriesController extends Controller
 {
-    public function index(bool $withServices = false)
+    public function index(bool $withGlobalServices = false)
     {
         try {
-            $categories = Category::when($withServices, function ($query) {
-                $query->with('services'); // Optional: Add nested relations here
+            $categories = Category::when($withGlobalServices, function ($query) {
+                $query->with('globalservices'); // Optional: Add nested relations here
             })->get();
 
             return response()->json($categories);

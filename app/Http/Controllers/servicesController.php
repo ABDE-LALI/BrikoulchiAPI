@@ -9,11 +9,13 @@ use Illuminate\Http\Request;
 
 class servicesController extends Controller
 {
-    public function index($userId = null)
+    public function index($userId = null, $globalserviceId = null)
     {
         $services = Service::with(['category', 'user', 'reviews'])
             ->when($userId, function ($query, $userId) {
                 return $query->where('user_id', (int) $userId);
+            })->when($globalserviceId, function($query, $globalserviceId) {
+                return $query->where('global_service_id', (int) $globalserviceId);
             })
             ->get();
 

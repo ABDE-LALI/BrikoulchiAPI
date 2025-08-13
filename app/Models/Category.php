@@ -23,5 +23,8 @@ class Category extends Model
     {
         return $this->hasMany(Service::class);
     }
+    public function globalservices(){
+        return $this->hasMany(GlobalService::class);
+    }
 }
 

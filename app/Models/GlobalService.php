@@ -12,6 +12,9 @@ class GlobalService extends Model
     public function services(){
         return $this->hasMany(Service::class);
     }
+    public function initialservices(){
+       return $this->hasMany(InitialServices::class);
+    }
     public function categorie(){
         return $this->belongsTo(Category::class, 'category_id');
     }
