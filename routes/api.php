@@ -22,6 +22,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/auth/isAuthenticated', function () {
         return true . 'hello';
     });
+    Route::post('/auth/create/service', [servicesController::class, 'createService']);
 });
 // Route::put('/updateUserInfo', function () {
 //     return response()->json(['message' => 'Route is working']);
@@ -29,7 +30,7 @@ Route::middleware('auth:sanctum')->group(function () {
 // routes/api.php
 Route::get('/Categories/{withGlobalServices?}', [categoriesController::class, 'index']);
 Route::get('/Services/{userId?}', [servicesController::class, 'index']);
-Route::get('/GServices/{globalserviceId?}', [InitialServicesController::class, 'index']);
+Route::get('/GServices/{globalserviceId?}', [InitialServicesController::class, 'getInitialServices']);
 Route::get('/user/index/', [UserController::class, 'index']);
 Route::get('/Service/reviews/{id}', [servicesController::class, 'getReviews']);
 Route::get('/ip-info', function () {

@@ -13,18 +13,18 @@ return new class extends Migration
     {
         Schema::create('services', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('description')->unique();
+            $table->string('title');
+            $table->text('description');
             $table->string('image')->nullable();
-            $table->integer('listings');
+            $table->integer('listings')->default(0);
             $table->enum('workDays', ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'])->default('Monday');
             $table->integer('workHours')->default(8);
             $table->enum('status', ['busy', 'available'])->default('available');
             $table->enum('type', ['timecount', 'freelance', 'fulltime', 'parttime']);
             $table->foreignId('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->foreignId('global_service_id')->references('id')->on('global_services')->onDelete('cascade');
+            $table->foreignId('initial_service_id')->references('id')->on('initial_services')->onDelete('cascade');
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->string('address');
             $table->float('lat')->nullable();
             $table->float('lng')->nullable();
             $table->float('rating')->default(0);

@@ -7,8 +7,9 @@ use Illuminate\Http\Request;
 
 class InitialServicesController extends Controller
 {
-    public function index($globalserviceId = null){
-        $services = InitialServices::find((int) $globalserviceId);
-        return response()->json([$services]);
+    public function getInitialServices($globalserviceId = null)
+    {
+        $services = InitialServices::where('global_service_id', (int) $globalserviceId)->get();
+        return response()->json($services);
     }
 }

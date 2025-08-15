@@ -18,11 +18,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        Category::factory()->count(15)->create();
         User::factory()->count(15)->create();
+        Category::factory()->count(15)->create();
         GlobalService::factory()->count(15)->create();
+        InitialServices::factory()->count(15)->create();
         Service::factory()->count(15)->create();
         ServiceReview::factory()->count(15)->create();
-        InitialServices::factory()->count(15)->create();
     }
 }

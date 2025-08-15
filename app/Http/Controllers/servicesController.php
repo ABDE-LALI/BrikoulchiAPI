@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\InitialServices;
 use App\Models\Service;
 use App\Models\ServiceReview;
 use App\Models\User;
@@ -14,12 +15,29 @@ class servicesController extends Controller
         $services = Service::with(['category', 'user', 'reviews'])
             ->when($userId, function ($query, $userId) {
                 return $query->where('user_id', (int) $userId);
-            })->when($globalserviceId, function($query, $globalserviceId) {
-                return $query->where('global_service_id', (int) $globalserviceId);
-            })
-            ->get();
+            })->get();
 
         return response()->json($services);
+    }
+    
+    public function createService(Request $request)
+    {
+        return response()->json(['message' => 'the service has been created successfuly']);
+        // return $request->all();
+        $validated = $request->validate([
+            'title' => 'required|string',
+            'description' => 'required|text',
+            'workDays' => 'required|string',
+            'workHours' => 'required|number',
+            'status' => 'required|string',
+            'type' => 'required|string',
+            'category_id' => 'required|number',
+            'global_service_id' => 'required|number',
+            'initial_service_id' => 'required|number',
+            'user_id' => 'required|number',
+            'lat' => 'required|string',
+            'lng' => 'required|string',
+        ]);
     }
     public function getReviews($id)
     {

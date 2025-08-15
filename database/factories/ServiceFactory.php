@@ -18,20 +18,21 @@ class ServiceFactory extends Factory
     {
         $cordinates = fake()->localCoordinates();
         return [
-            'name' => fake()->word(),
-            'description' => fake()->sentence(),
-            'image' => fake()->imageUrl(640, 480, 'business'),
-            'listings' => fake()->numberBetween(1, 100),
-            'type' => fake()->randomElement(['daily', 'freelance']),
-            'status' => fake()->randomElement(['busy', 'available']),
-            'type' => fake()->randomElement(['timecount', 'freelance']),
-            'address' => fake()->city(),
-            'lat' => $cordinates['latitude'],
-            'lng' => $cordinates['longitude'],
-            'rating' => fake()->randomFloat(2, 0, 5),
-            'user_id' => fake()->numberBetween(1, 15),
-            'category_id' => fake()->numberBetween(1, 15),
-            'global_service_id' =>fake()->numberBetween(1, 15)
+            'title' => $this->faker->sentence(3),
+            'description' => $this->faker->paragraph(),
+            'image' => $this->faker->imageUrl(640, 480, 'business', true),
+            'listings' => $this->faker->numberBetween(1, 100),
+            'workDays' => $this->faker->randomElement(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']),
+            'workHours' => $this->faker->numberBetween(1, 12),
+            'status' => $this->faker->randomElement(['busy', 'available']),
+            'type' => $this->faker->randomElement(['timecount', 'freelance', 'fulltime', 'parttime']),
+            'category_id' => $this->faker->numberBetween(1, 10),
+            'global_service_id' => $this->faker->numberBetween(1, 10),
+            'initial_service_id' => $this->faker->numberBetween(1, 10),
+            'user_id' => $this->faker->numberBetween(1, 10),
+            'lat' => 1.3454356,
+            'lng' => 1.345432546356,
+            'rating' => $this->faker->randomFloat(1, 0, 5),
         ];
     }
 }
