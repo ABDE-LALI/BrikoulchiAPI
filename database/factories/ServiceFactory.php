@@ -23,7 +23,7 @@ class ServiceFactory extends Factory
             'image' => $this->faker->imageUrl(640, 480, 'business', true),
             'listings' => $this->faker->numberBetween(1, 100),
             'workDays' => $this->faker->randomElement(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']),
-            'workHours' => $this->faker->numberBetween(1, 12),
+            'workHours' => $this->faker->sentence(2),
             'status' => $this->faker->randomElement(['busy', 'available']),
             'type' => $this->faker->randomElement(['timecount', 'freelance', 'fulltime', 'parttime']),
             'category_id' => $this->faker->numberBetween(1, 10),

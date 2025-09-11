@@ -68,7 +68,7 @@ class UserController extends Controller
                 'message' => 'Server error',
                 'error' => $th->getMessage()
             ], 500);
-        }
+        }   
     }
 
     /**

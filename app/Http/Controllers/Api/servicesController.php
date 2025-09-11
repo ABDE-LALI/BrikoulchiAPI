@@ -1,12 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Models\InitialServices;
 use App\Models\Service;
 use App\Models\ServiceReview;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Controller;
+
 
 class servicesController extends Controller
 {
@@ -19,25 +23,75 @@ class servicesController extends Controller
 
         return response()->json($services);
     }
-    
+
     public function createService(Request $request)
     {
-        return response()->json(['message' => 'the service has been created successfuly']);
-        // return $request->all();
-        $validated = $request->validate([
-            'title' => 'required|string',
-            'description' => 'required|text',
-            'workDays' => 'required|string',
-            'workHours' => 'required|number',
-            'status' => 'required|string',
-            'type' => 'required|string',
-            'category_id' => 'required|number',
-            'global_service_id' => 'required|number',
-            'initial_service_id' => 'required|number',
-            'user_id' => 'required|number',
-            'lat' => 'required|string',
-            'lng' => 'required|string',
-        ]);
+
+        try {
+            $validateService = Validator::make(
+                $request->all(),
+                [
+                    'title' => 'required|string',
+                    'description' => 'required|string',
+                    'workDays' => 'required|string',
+                    'workHours' => 'required|string',
+                    'status' => 'required|string',
+                    'type' => 'required|string',
+                    'category_id' => 'required|integer',
+                    'global_service_id' => 'required|integer',
+                    'initial_service_id' => 'required|integer',
+                    'user_id' => 'required|integer',
+                    'lat' => 'required|numeric',
+                    'lng' => 'required|numeric',
+                ]
+            );
+
+            if ($validateService->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validation error',
+                    'errors' => $validateService->errors()
+                ], 422); // 422 is more appropriate for validation errors
+            }
+            // return response($validateService->passes().'hahaha');
+
+            $service = Service::create([
+                'title' => $request->title,
+                'description' => $request->description,
+                'workDays' => $request->workDays,
+                'workHours' => $request->workHours,
+                'type' => $request->type,
+                'status' => $request->status,
+                'category_id' => $request->category_id,
+                'global_service_id' => $request->global_service_id,
+                'initial_service_id' => $request->initial_service_id,
+                'user_id' => $request->user_id,
+                'lat' => $request->lat,
+                'lng' => $request->lng
+            ]);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Service created successfully',
+                'data' => [
+                    'service' => $service
+                ]
+            ], 201); // 201 for resource creation
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Server error',
+                'error' => $th->getMessage()
+            ], 500);
+        }
+    }
+    public function deleteService($id){
+        $service = Service::find($id);
+        if ($service){
+            $service->delete();
+            return response()->json(['message' => 'the service has been deleted sucsessfully']);
+        }
+        return response()->json(['message' => 'the service has\'t deleted ']);
     }
     public function getReviews($id)
     {

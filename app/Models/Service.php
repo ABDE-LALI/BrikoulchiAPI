@@ -35,6 +35,6 @@ class Service extends Model
     }
     public function globalservice()
     {
-        return $this->belongsTo(GlobalService::class, 'globla_service_id');
+        return $this->belongsTo(GlobalService::class, 'global_service_id');
     }
 }
