@@ -14,7 +14,7 @@ use App\Http\Controllers\Controller;
 
 class servicesController extends Controller
 {
-    public function index($userId = null, $globalserviceId = null)
+    public function index($userId = null)
     {
         $services = Service::with(['category', 'user', 'reviews'])
             ->when($userId, function ($query, $userId) {
