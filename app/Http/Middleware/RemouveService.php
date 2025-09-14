@@ -16,7 +16,7 @@ class RemouveService
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $serviceId = $request->route('Id');
+        $serviceId = $request->route('id');
         $service = Service::findOrFail($serviceId);
         if ($request->userId ==! $service->user_id)
         {

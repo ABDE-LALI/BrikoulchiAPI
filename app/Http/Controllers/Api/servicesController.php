@@ -85,13 +85,56 @@ class servicesController extends Controller
             ], 500);
         }
     }
-    public function deleteService($id){
-        $service = Service::find($id);
-        if ($service){
+    public function deleteService($id)
+    {
+        $service = Service::findOrFail($id);
+        if ($service) {
             $service->delete();
-            return response()->json(['message' => 'the service has been deleted sucsessfully']);
+            return response()->json(['message' => 'service deleted ']);
         }
         return response()->json(['message' => 'the service has\'t deleted ']);
+    }
+    public function editService(Request $request, $id)
+    {
+        $validatedServiceEdition = validator::make(
+            $request->all(),
+            [
+                'title' => 'required|string',
+                'description' => 'required|string',
+                'workDays' => 'required|string',
+                'workHours' => 'required|string',
+                'status' => 'required|string',
+                'type' => 'required|string',
+                'category_id' => 'required|integer',
+                'global_service_id' => 'required|integer',
+                'initial_service_id' => 'required|integer',
+                'user_id' => 'required|integer',
+                'lat' => 'required|numeric',
+                'lng' => 'required|numeric',
+            ]
+        );
+        if ($validatedServiceEdition->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validation error',
+                'errors' => $validatedServiceEdition->errors()
+            ], 422); // 422 is more appropriate for validation errors
+        }
+        $service = Service::findOrFail($id);
+        $service->title = $request->title;
+        $service->description = $request->description;
+        $service->workDays = $request->workDays;
+        $service->workHours = $request->workHours;
+        $service->status = $request->status;
+        $service->type = $request->type;
+        $service->category_id = $request->category_id;
+        $service->global_service_id = $request->global_service_id;
+        $service->initial_service_id = $request->initial_service_id;
+        $service->user_id = $request->user_id;
+        $service->lat = $request->lat;
+        $service->lng = $request->lng;
+        $service->save();
+        return response()->json(['message' => 'the service has been edited']);
     }
     public function getReviews($id)
     {

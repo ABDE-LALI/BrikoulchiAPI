@@ -21,6 +21,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/auth/ReactWithLike/{reviewId}', [servicesController::class, 'ReactWithLike']);
     Route::post('/auth/RemouveReview/{reviewId}', [servicesController::class, 'RemouveReview'])->middleware(RemouveReview::class);
     Route::post('/auth/delete/service/{id}', [servicesController::class, 'deleteService'])->middleware(RemouveService::class);
+    Route::post('/auth/edit/service/{id}', [servicesController::class, 'editService'])->middleware(RemouveService::class);
     Route::get('/auth/isAuthenticated', function () {
         return true . 'hello';
     });
