@@ -68,7 +68,7 @@ class UserController extends Controller
                 'message' => 'Server error',
                 'error' => $th->getMessage()
             ], 500);
-        }   
+        }
     }
 
     /**
@@ -159,18 +159,18 @@ class UserController extends Controller
     public function updateUser(Request $request, $id)
     {
         $user = User::findOrFail($id);
-
+        
         $validateUser = Validator::make($request->all(), [
             'firstName' => 'required|string|max:255',
             'lastName' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:users,username,' . $user->id,
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-            'phone1' => 'required|string|max:15',
-            'phone2' => 'nullable|string|max:15',
+            'phone1' => 'required|string|max:20',
+            'phone2' => 'nullable|string|max:20',
             'address' => 'nullable|string|max:255',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120'
         ]);
-
+        // return response()->json(['msg' => $validateUser->fails()]);
         if ($validateUser->fails()) {
             return response()->json([
                 'status' => false,

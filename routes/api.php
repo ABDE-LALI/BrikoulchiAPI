@@ -6,7 +6,6 @@ use App\Http\Controllers\Api\InitialServicesController;
 use App\Http\Controllers\Api\servicesController;
 use App\Http\Middleware\RemouveReview;
 use App\Http\Middleware\RemouveService;
-use Illuminate\Http\Request; // Fixed: Correct Request class
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 
@@ -16,7 +15,7 @@ Route::post('/auth/refresh', [UserController::class, 'refresh']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/auth/logout', [UserController::class, 'logoutUser']);
     Route::get('/auth/profile', [UserController::class, 'index']);
-    Route::post('/updateUserInfo/{id}', [UserController::class, 'updateUser']);
+    Route::post('/auth/updateUserInfo/{id}', [UserController::class, 'updateUser']);
     Route::post('/auth/createReview', [servicesController::class, 'createReview']);
     Route::post('/auth/ReactWithLike/{reviewId}', [servicesController::class, 'ReactWithLike']);
     Route::post('/auth/RemouveReview/{reviewId}', [servicesController::class, 'RemouveReview'])->middleware(RemouveReview::class);
