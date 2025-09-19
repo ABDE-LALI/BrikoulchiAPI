@@ -17,7 +17,7 @@ return new class extends Migration
             $table->text('description');
             $table->string('image')->nullable();
             $table->integer('listings')->default(0);
-            $table->enum('workDays', ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'])->default('Monday');
+            $table->string('workDays')->default('Mo');
             $table->string('workHours');
             $table->enum('status', ['busy', 'available'])->default('available');
             $table->enum('type', ['timecount', 'freelance', 'fulltime', 'parttime']);
