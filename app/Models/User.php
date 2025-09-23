@@ -33,6 +33,12 @@ class User extends Authenticatable
         'password',
         'remember_token',
         'email_verified_at',
+        'refresh_token',
+        'is_admin',
+        'updated_at',
+        'phone_verified_at',
+        'is_provider',
+        'created_at'
     ];
 
     /**

@@ -15,11 +15,20 @@ use function PHPUnit\Framework\isNull;
 
 class UserController extends Controller
 {
-    public function index($id)
+    public function index($username)
     {
-
-        $user = User::with('services')->findOrFail($id);
-        return response()->json($user);
+        $user = User::with('services')->where('username', $username)->get();
+        return response()->json(['user' => $user->except([
+            'password',
+            'remember_token',
+            'email_verified_at',
+            'refresh_token',
+            'is_admin',
+            'updated_at',
+            'phone_verified_at',
+            'is_provider',
+            'created_at'
+        ]), 'status' => 200]);
     }
     /**
      * Create User
@@ -159,7 +168,7 @@ class UserController extends Controller
     public function updateUser(Request $request, $id)
     {
         $user = User::findOrFail($id);
-        
+
         $validateUser = Validator::make($request->all(), [
             'firstName' => 'required|string|max:255',
             'lastName' => 'required|string|max:255',
