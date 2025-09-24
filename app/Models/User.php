@@ -37,7 +37,6 @@ class User extends Authenticatable
         'is_admin',
         'updated_at',
         'phone_verified_at',
-        'is_provider',
         'created_at'
     ];
 

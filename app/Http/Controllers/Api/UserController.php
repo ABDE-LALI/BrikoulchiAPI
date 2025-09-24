@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Throwable;
 
 use function PHPUnit\Framework\isNull;
 
@@ -17,18 +18,20 @@ class UserController extends Controller
 {
     public function index($username)
     {
-        $user = User::with('services')->where('username', $username)->get();
-        return response()->json(['user' => $user->except([
-            'password',
-            'remember_token',
-            'email_verified_at',
-            'refresh_token',
-            'is_admin',
-            'updated_at',
-            'phone_verified_at',
-            'is_provider',
-            'created_at'
-        ]), 'status' => 200]);
+        try {
+            $user = User::with(['services' => function ($query) {
+                $query->with(['category', 'reviews', 'user']);
+            }])->where('username', $username)->first();
+
+            if ($user) {
+                // return response()->json(['message' => 'hello', 'user' => $user]);
+                if ($user->is_provider === 1) {
+                    return response()->json(['user' => $user, 'status' => 200, 'message' => 'Succsess'], 200);
+                } else return response()->json(['status' => 403, 'message' => 'Failed to accsess the profile (this isn\'t a provider profile !?)'], 403);
+            } else return response()->json(['status' => 404, 'message' => 'user not found'], 404);
+        } catch (Throwable $error) {
+            return response()->json(['status' => 500, 'message' => $error->message], 500);
+        }
     }
     /**
      * Create User

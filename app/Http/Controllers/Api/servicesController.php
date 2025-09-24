@@ -31,7 +31,7 @@ class servicesController extends Controller
             $validateService = Validator::make(
                 $request->all(),
                 [
-                    'title' => 'required|string',
+                    'title' => 'required|string|max:20',
                     'description' => 'required|string',
                     'workDays' => 'required|string',
                     'workHours' => 'required|string',

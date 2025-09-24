@@ -18,7 +18,7 @@ class ServiceFactory extends Factory
     {
         $cordinates = fake()->localCoordinates();
         return [
-            'title' => $this->faker->sentence(3),
+            'title' => substr($this->faker->sentence(3), 0, 20),
             'description' => $this->faker->paragraph(),
             'image' => $this->faker->imageUrl(640, 480, 'business', true),
             'listings' => $this->faker->numberBetween(1, 100),
