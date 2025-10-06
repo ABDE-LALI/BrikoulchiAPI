@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('description')->unique();
             $table->string('image')->nullable();
             $table->integer('listings');
-            $table->foreignId('category_id')->references('id')->on('categories')->onDelete('cascade');
-            $table->foreignId('global_service_id')->references('id')->on('global_services')->onDelete('cascade');
+            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
+            $table->foreignId('global_service_id')->constrained('global_services')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('initialservices');
+        Schema::dropIfExists('initial_services');
     }
 };

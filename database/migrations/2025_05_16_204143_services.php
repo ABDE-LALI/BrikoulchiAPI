@@ -21,10 +21,10 @@ return new class extends Migration
             $table->string('workHours');
             $table->enum('status', ['busy', 'available'])->default('available');
             $table->enum('type', ['timecount', 'freelance', 'fulltime', 'parttime']);
-            $table->foreignId('category_id')->references('id')->on('categories')->onDelete('cascade');
-            $table->foreignId('global_service_id')->references('id')->on('global_services')->onDelete('cascade');
-            $table->foreignId('initial_service_id')->references('id')->on('initial_services')->onDelete('cascade');
-            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
+            $table->foreignId('global_service_id')->constrained('global_services')->onDelete('cascade');
+            $table->foreignId('initial_service_id')->constrained('initial_services')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->float('lat')->nullable();
             $table->float('lng')->nullable();
             $table->float('rating')->default(0);

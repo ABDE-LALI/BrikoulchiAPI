@@ -4,8 +4,11 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\categoriesController;
 use App\Http\Controllers\Api\InitialServicesController;
 use App\Http\Controllers\Api\servicesController;
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\ConversationController;
 use App\Http\Middleware\RemouveReview;
 use App\Http\Middleware\RemouveService;
+use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 
@@ -13,6 +16,11 @@ Route::post('/auth/register', [UserController::class, 'createUser']);
 Route::post('/auth/login', [UserController::class, 'loginUser']);
 Route::post('/auth/refresh', [UserController::class, 'refresh']);
 Route::middleware('auth:sanctum')->group(function () {
+    // Route::get('/chat', [ChatController::class, 'index']);
+    // Route::post('/chat', [ChatController::class, 'store']);
+    Route::get('/auth/fetchMessages', [ConversationController::class, 'conversationMessages']);
+    Route::get('/auth/fetchConversations', [ConversationController::class, 'index']);
+    Route::post('/auth/sendMessage', [ChatController::class, 'store']);
     Route::post('/auth/logout', [UserController::class, 'logoutUser']);
     Route::post('/auth/updateUserInfo/{id}', [UserController::class, 'updateUser']);
     Route::post('/auth/createReview', [servicesController::class, 'createReview']);
@@ -39,3 +47,5 @@ Route::get('/ip-info', function () {
     $response = Http::get('https://ipapi.co/json/');
     return $response->json();
 });
+
+Broadcast::routes();

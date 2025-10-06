@@ -27,7 +27,7 @@ class UserController extends Controller
                 // return response()->json(['message' => 'hello', 'user' => $user]);
                 if ($user->is_provider === 1) {
                     return response()->json(['user' => $user, 'status' => 200, 'message' => 'Succsess'], 200);
-                } else return response()->json(['status' => 403, 'message' => 'Failed to accsess the profile (this isn\'t a provider profile !?)'], 403);
+                } else return response()->json(['status' => 403, 'message' => 'Failed to accsess the profile (this isn\'t a provider profile !?)']);
             } else return response()->json(['status' => 404, 'message' => 'user not found'], 404);
         } catch (Throwable $error) {
             return response()->json(['status' => 500, 'message' => $error->message], 500);

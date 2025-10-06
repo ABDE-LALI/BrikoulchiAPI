@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\Category;
+use App\Models\ChatMessage;
+use App\Models\Conversation;
 use App\Models\GlobalService;
 use App\Models\InitialServices;
 use App\Models\Service;
@@ -24,5 +26,7 @@ class DatabaseSeeder extends Seeder
         InitialServices::factory()->count(15)->create();
         Service::factory()->count(15)->create();
         ServiceReview::factory()->count(15)->create();
+        Conversation::factory()->count(10)->create();
+        ChatMessage::factory()->count(50)->create();
     }
 }
